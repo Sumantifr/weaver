@@ -284,6 +284,7 @@ class ParticleNetTagger(nn.Module):
             sv_features *= sv_mask
 
         points = torch.cat((pf_points, sv_points), dim=2)
-        features = torch.cat((self.pf_conv(pf_features * pf_mask) * pf_mask, self.sv_conv(sv_features * sv_mask) * sv_mask), dim=2)
+        #features = torch.cat((self.pf_conv(pf_features * pf_mask) * pf_mask, self.sv_conv(sv_features * sv_mask) * sv_mask), dim=2)
+	features = torch.cat((self.pf_conv(torch.nan_to_num(pf_features * pf_mask)) * pf_mask, self.sv_conv(torch.nan_to_num(sv_features * sv_mask)) * sv_mask), dim=2)
         mask = torch.cat((pf_mask, sv_mask), dim=2)
         return self.pn(points, features, lep_features, mask)
